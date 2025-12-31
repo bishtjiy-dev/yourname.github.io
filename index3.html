@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Gift for My Bestie 🐱✨</title>
+    <style>
+        :root {
+            --bg: linear-gradient(-45deg, #ffdee9, #b5fffc, #ffffff, #ffecd2);
+            --accent: #ff7eb9;
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            background: var(--bg);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- LOADING SCREEN --- */
+        #loader {
+            position: fixed; width: 100%; height: 100%;
+            background: #fff; z-index: 999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .kitty-loader { font-size: 80px; animation: bounce 1s infinite; }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        /* --- MAIN CONTAINER --- */
+        .container {
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh; width: 100%; perspective: 1000px;
+        }
+
+        .page {
+            display: none; width: 85%; max-width: 400px;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 30px; border-radius: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center; animation: slideIn 0.5s ease forwards;
+        }
+        .active { display: block; }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- FLIP CARD --- */
+        .flip-card {
+            background-color: transparent; width: 280px; height: 180px;
+            perspective: 1000px; margin: 20px auto; cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            transition: transform 0.8s; transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-front, .flip-back {
+            position: absolute; width: 100%; height: 100%;
+            backface-visibility: hidden; border-radius: 15px;
+            display: flex; justify-content: center; align-items: center; padding: 15px;
+        }
+        .flip-front { background: var(--accent); color: white; font-weight: bold; }
+        .flip-back { background: #fff; color: #333; transform: rotateY(180deg); border: 2px solid var(--accent); }
+
+        /* --- BUTTONS & DECOR --- */
+        .btn {
+            background: var(--accent); color: white; border: none;
+            padding: 12px 25px; border-radius: 50px; font-weight: bold;
+            cursor: pointer; margin-top: 15px; transition: 0.3s;
+        }
+        .btn:hover { transform: scale(1.05); filter: brightness(1.1); }
+        .heart { position: absolute; pointer-events: none; animation: float 4s linear infinite; }
+        @keyframes float { to { transform: translateY(-100vh) rotate(360deg); opacity: 0; } }
+        .message-text { line-height: 1.5; color: #555; font-size: 0.95rem; text-align: left; }
+    </style>
+</head>
+<body onload="hideLoader()">
+
+    <div id="loader">
+        <div class="kitty-loader">🐱</div>
+        <p>Loading Love for Bestie...</p>
+    </div>
+
+    <audio id="bgMusic" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="container">
+        <div class="page active" id="p1">
+            <div style="font-size: 60px;">🐧</div>
+            <h2>Hey Bestie!</h2>
+            <p>I have a multi-page surprise for you to start 2026.</p>
+            <button class="btn" onclick="nextPage(2)">Let's Go! ➔</button>
+        </div>
+
+        <div class="page" id="p2">
+            <h3>Step 1: A Surprise Note</h3>
+            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                <div class="flip-card-inner">
+                    <div class="flip-front">Tap to Reveal 💌</div>
+                    <div class="flip-back">Thank you for being my unbiological sister and my anchor. I love you! ❤️</div>
+                </div>
+            </div>
+            <p><small>(Tap the card to flip it!)</small></p>
+            <button class="btn" onclick="nextPage(3)">Next Page ➔</button>
+        </div>
+
+        <div class="page" id="p3">
+            <h3 style="color: var(--accent);">A Letter to You</h3>
+            <p class="message-text">
+                When I look back at this year, you are in every highlight. Thank you for being the one person who gets me without words, for the late-night sessions, and for making boring days adventures. You are my biggest hype-woman. I don’t know how I’d navigate life without you. No matter what changes in 2026, "us" stays the same!
+            </p>
+            <button class="btn" onclick="nextPage(4)">Read My Wishes ➔</button>
+        </div>
+
+        <div class="page" id="p4">
+            <h3>2026 Wishes 🎆</h3>
+            <ul style="text-align: left; color: #444; list-style: none; padding: 0;">
+                <li>✨ Endless laughter & joy</li>
+                <li>✨ Traveling to your dream spots</li>
+                <li>✨ Success in everything you touch</li>
+                <li>✨ 365 days of being your amazing self</li>
+            </ul>
+            <div style="font-size: 40px; margin-top: 15px;">🐱💖🐧</div>
+            <button class="btn" onclick="nextPage(1)">See Again ↺</button>
+        </div>
+    </div>
+
+    <script>
+        function hideLoader() {
+            setTimeout(() => { document.getElementById('loader').style.display = 'none'; }, 2000);
+        }
+
+        function nextPage(pageNum) {
+            // Start music
+            const music = document.getElementById('bgMusic');
+            music.play().catch(() => {});
+
+            // Switch pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('p' + pageNum).classList.add('active');
+            
+            // Spawn hearts
+            for(let i=0; i<10; i++) { createHeart(); }
+        }
+
+        function createHeart() {
+            const h = document.createElement('div');
+            h.classList.add('heart');
+            h.innerHTML = ['❤️','✨','🌸','🐱'][Math.floor(Math.random()*4)];
+            h.style.left = Math.random() * 100 + 'vw';
+            h.style.top = '100vh';
+            h.style.fontSize = (Math.random() * 20 + 15) + 'px';
+            document.body.appendChild(h);
+            setTimeout(() => h.remove(), 4000);
+        }
+    </script>
+</body>
+</html>
